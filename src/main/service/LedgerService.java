@@ -12,7 +12,7 @@ import java.util.List;
  * @author Gurudas Sulebhavikar
  */
 public class LedgerService {
-    public static void matchDemandSupplyOrders(Order order, List<OrderMatchResult> orderMatchResults) throws Exception {
-        OrderTypeFactory.getService(order.getOrderId()).processOrder(order, orderMatchResults);
+    public static void matchDemandSupplyOrders(Order order, List<OrderMatchResult> orderMatchResults, boolean clearStaticVar) throws Exception {
+        OrderTypeFactory.getService(order.getOrderId(), clearStaticVar).processOrder(order, orderMatchResults);
     }
 }

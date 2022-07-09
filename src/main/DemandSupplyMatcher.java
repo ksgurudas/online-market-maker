@@ -13,7 +13,7 @@ import java.util.List;
  * @author Gurudas Sulebhavikar
  */
 public class DemandSupplyMatcher {
-    public static List<OrderMatchResult> matchDemandSupply(List<Order> orders) throws Exception {
+    public static List<OrderMatchResult> matchDemandSupply(List<Order> orders, boolean clearStaticVar) throws Exception {
         // Avoid matching algorithm if there are orders in the ledger and throw exception.
         if (orders.isEmpty()) {
             throw new Exception("There is no demand-supply present at this moment.");
@@ -30,16 +30,10 @@ public class DemandSupplyMatcher {
         List<OrderMatchResult> orderMatchResults = new ArrayList<>();
 
         // Iterate each order from ledger and try to match them to proper demand/supply orders.
-        orders.stream().forEach(
-                order -> {
-                    try {
-                        LedgerService.matchDemandSupplyOrders(order, orderMatchResults);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }
-        );
+        for (Order order : orders) {
+            LedgerService.matchDemandSupplyOrders(order, orderMatchResults, clearStaticVar);
+            clearStaticVar = false;
+        }
 
         System.out.println("Orders Output: ");
         for(OrderMatchResult order : orderMatchResults) {

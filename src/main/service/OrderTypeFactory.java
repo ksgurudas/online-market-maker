@@ -14,20 +14,18 @@ public class OrderTypeFactory {
     private static DemandService demandService;
     private static SupplyService supplyService;
 
-    static {
+    public static AbstractService<Order> getService(String orderId, boolean clearStaticVar) throws Exception {
+        // Reinitialize our services when you are testing for different ledgers. Or else result will not be as expected since the orders will remain in ledger
+        // from previous request.
+        if (clearStaticVar) {
+            demandService = new DemandService(new ConcurrentHashMap<String, PriorityQueue<Order>>());
 
-        demandService = new DemandService(new ConcurrentHashMap<String, PriorityQueue<Order>>());
+            supplyService = new SupplyService(new ConcurrentHashMap<String, PriorityQueue<Order>>());
 
-        supplyService = new SupplyService(new ConcurrentHashMap<String, PriorityQueue<Order>>());
-
-        // make demand/supply orders available in both the services.
-        demandService.setSupplyOrderMap(supplyService.getSupplyOrderMap());
-        supplyService.setDemandOrderMap(demandService.getDemandOrderMap());
-
-    }
-
-
-    public static AbstractService<Order> getService(String orderId) throws Exception {
+            // make demand/supply orders available in both the services.
+            demandService.setSupplyOrderMap(supplyService.getSupplyOrderMap());
+            supplyService.setDemandOrderMap(demandService.getDemandOrderMap());
+        }
         if (orderId.startsWith("s")) {
             return supplyService;
         } else if(orderId.startsWith("d")){

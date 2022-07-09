@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DemandSupplyMatcherTest {
-    @Test
+    @Test()
     public void example1() throws Exception {
         List<Order> orders = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -24,7 +24,7 @@ public class DemandSupplyMatcherTest {
         orders.add(new Order("d3", LocalTime.parse("09:49", formatter),"tomato", BigDecimal.valueOf(21), 40L));
         orders.add(new Order("s3", LocalTime.parse("09:50", formatter),"tomato", BigDecimal.valueOf(19), 50L));
 
-        List<OrderMatchResult> results = DemandSupplyMatcher.matchDemandSupply(orders);
+        List<OrderMatchResult> results = DemandSupplyMatcher.matchDemandSupply(orders, true);
 
         /* Expected Result
                d1 s2 20/kg 90kg
@@ -65,7 +65,7 @@ public class DemandSupplyMatcherTest {
         orders.add(new Order("s3", LocalTime.parse("09:45", formatter),"potato", BigDecimal.valueOf(110), 2L));
         orders.add(new Order("s4", LocalTime.parse("09:45", formatter),"tomato", BigDecimal.valueOf(110), 11L));
 
-        List<OrderMatchResult> results = DemandSupplyMatcher.matchDemandSupply(orders);
+        List<OrderMatchResult> results = DemandSupplyMatcher.matchDemandSupply(orders, true);
 
         /* Expected Result
             d2 s1 110/kg 1kg
